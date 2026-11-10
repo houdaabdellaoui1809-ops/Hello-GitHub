@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple CV Creator - Créez votre CV professionnel et élégant</title>
+  
+  <!-- Polices Google Fonts pour une typographie moderne et soignée -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Bibliothèque légère pour le téléchargement PDF direct -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- Feuille de style CSS externe -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==================== BARRE DE NAVIGATION ==================== -->
+  <header class="navbar no-print">
+    <div class="container nav-content">
+      <div class="logo">
+        <span class="logo-badge">🌸</span>
+        <div>
+          <span class="logo-title">Simple CV Creator</span>
+          <span class="logo-subtitle">Moderne & Élégant</span>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="#home-section" class="nav-link active">Accueil</a>
+        <a href="#form-section" class="nav-link">Formulaire</a>
+        <a href="#preview-section" class="nav-link" id="nav-preview-link">Aperçu du CV</a>
+      </nav>
+      <div class="nav-status" id="save-status">
+        <span class="status-dot"></span>
+        <span class="status-text">Sauvegarde auto active</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== SECTION D'ACCUEIL (BIENVENUE) ==================== -->
+  <section id="home-section" class="hero-section no-print">
+    <div class="container hero-content">
+      <div class="hero-badge">✨ 100% Gratuit, Simple & Sans Inscription</div>
+      <h1 class="hero-title">
+        Créez un <span class="gradient-text">CV professionnel</span> et élégant en quelques minutes
+      </h1>
+      <p class="hero-description">
+        Bienvenue sur <strong>Simple CV Creator</strong> ! Conçu spécialement pour être simple, clair et agréable à utiliser,
+        même pour les débutants. Remplissez simplement vos informations, visualisez le résultat en temps réel
+        et téléchargez votre CV au format PDF prêt pour vos candidatures.
+      </p>
+      
+      <div class="hero-actions">
+        <a href="#form-section" class="btn btn-primary btn-lg" id="start-cv-btn">
+          🚀 Créer mon CV
+        </a>
+        <button type="button" class="btn btn-secondary btn-lg" id="hero-preview-btn">
+          👁️ Voir l'aperçu
+        </button>
+      </div>
+
+      <!-- Petites cartes avantages -->
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>Design Doux & Épuré</h3>
+          <p>Palette moderne aux tons rose doux, violet clair et blanc pour un rendu esthétique et soigné.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Mise à jour en Direct</h3>
+          <p>Votre CV s'actualise automatiquement au fil de votre saisie, sans rechargement.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💾</div>
+          <h3>Sauvegarde Automatique</h3>
+          <p>Vos données sont mémorisées dans votre navigateur grâce au LocalStorage pour ne rien perdre.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📄</div>
+          <h3>Export PDF & Impression</h3>
+          <p>Téléchargez votre CV au format PDF en un clic ou imprimez-le directement.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CONTENU PRINCIPAL ==================== -->
+  <main class="container main-content">
+
+    <!-- ==================== ÉTAPE 1 : FORMULAIRE DE CRÉATION ==================== -->
+    <section id="form-section" class="card form-card">
+      <div class="section-header">
+        <span class="section-tag">Étape de création</span>
+        <h2>Remplissez les informations de votre CV</h2>
+        <p>Complétez les rubriques ci-dessous. Les champs marqués d'une étoile (<span class="required">*</span>) sont obligatoires.</p>
+      </div>
+
+      <form id="cv-form" novalidate>
+
+        <!-- 1. Photo personnelle (facultative) -->
+        <fieldset class="form-group-wrapper">
+          <legend>📸 Photo personnelle (facultative)</legend>
+          <div class="photo-upload-container">
+            <div class="photo-preview-box" id="photo-preview-box">
+              <img id="photo-preview-thumbnail" src="" alt="Aperçu photo" class="hidden">
+              <div class="photo-placeholder" id="photo-placeholder">
+                <span>👤</span>
+                <small>Aucune photo</small>
+              </div>
+            </div>
+            <div class="photo-upload-actions">
+              <label for="photo" class="btn btn-outline btn-sm">
+                📁 Choisir une photo
+              </label>
+              <input type="file" id="photo" name="photo" accept="image/*" class="file-input-hidden">
+              <button type="button" id="remove-photo-btn" class="btn btn-text btn-sm hidden">
+                🗑️ Supprimer
+              </button>
+              <p class="help-text">Formats acceptés : JPG, PNG, WEBP (Max : 2 Mo). Idéal pour un profil professionnel.</p>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- 2. Informations personnelles -->
+        <fieldset class="form-group-wrapper">
+          <legend>👤 Informations personnelles</legend>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fullName">Nom et prénom <span class="required">*</span></label>
+              <input 
+                type="text" 
+                id="fullName" 
+                name="fullName" 
+                placeholder="ex. Sophie Martin" 
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="email">Adresse e-mail <span class="required">*</span></label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                placeholder="ex. sophie.martin@email.com" 
+                required
+              >
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Numéro de téléphone <span class="required">*</span></label>
+              <input 
+                type="tel" 
+                id="phone" 
+                name="phone" 
+                placeholder="ex. 06 12 34 56 78" 
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="address">Adresse / Ville <span class="required">*</span></label>
+              <input 
+                type="text" 
+                id="address" 
+                name="address" 
+                placeholder="ex. Paris, France" 
+                required
+              >
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- 3. Profil professionnel -->
+        <fieldset class="form-group-wrapper">
+          <legend>💼 Profil professionnel</legend>
+          <div class="form-group">
+            <label for="profile">Résumé de votre profil & objectifs</label>
+            <textarea 
+              id="profile" 
+              name="profile" 
+              rows="3" 
+              placeholder="ex. Passionnée par le développement web et la création de solutions digitales intuitives. Rigoureuse, créative et dotée d'un bon esprit d'équipe, je recherche de nouveaux défis professionnels."
+            ></textarea>
+            <small class="help-text">Présentez brièvement qui vous êtes, vos points forts et votre projet.</small>
+          </div>
+        </fieldset>
+
+        <!-- 4. Formations et études -->
+        <fieldset class="form-group-wrapper">
+          <legend>🎓 Formation et études</legend>
+          <div class="form-group">
+            <label for="education">Diplômes, établissements & années <span class="required">*</span></label>
+            <textarea 
+              id="education" 
+              name="education" 
+              rows="3" 
+              placeholder="ex. Licence en Informatique - Université de Paris (2022 - 2024)&#10;Baccalauréat Général - Mention Très Bien (2021)" 
+              required
+            ></textarea>
+            <small class="help-text">Indiquez vos diplômes et formations (une ligne par formation).</small>
+          </div>
+        </fieldset>
+
+        <!-- 5. Expériences professionnelles -->
+        <fieldset class="form-group-wrapper">
+          <legend>💼 Expériences professionnelles</legend>
+          <div class="form-group">
+            <label for="experience">Postes, entreprises & missions <span class="required">*</span></label>
+            <textarea 
+              id="experience" 
+              name="experience" 
+              rows="4" 
+              placeholder="ex. Développeuse Web Junior - Agence Créative (2023 - 2024)&#10;• Conception et intégration d'interfaces web responsives&#10;• Optimisation de l'accessibilité et de la performance des pages&#10;• Travail en équipe agile avec Git et réunions quotidiennes" 
+              required
+            ></textarea>
+            <small class="help-text">Décrivez vos stages, emplois ou projets scolaires pertinents.</small>
+          </div>
+        </fieldset>
+
+        <!-- 6. Compétences -->
+        <fieldset class="form-group-wrapper">
+          <legend>⚡ Compétences</legend>
+          <div class="form-group">
+            <label for="skills">Compétences clés <span class="required">*</span></label>
+            <textarea 
+              id="skills" 
+              name="skills" 
+              rows="2" 
+              placeholder="ex. HTML5, CSS3, JavaScript, Git, Communication, Résolution de problèmes, Travail d'équipe" 
+              required
+            ></textarea>
+            <small class="help-text">Séparez vos compétences par des virgules ou des retours à la ligne pour créer de jolis badges.</small>
+          </div>
+        </fieldset>
+
+        <!-- 7. Langues -->
+        <fieldset class="form-group-wrapper">
+          <legend>🌐 Langues</legend>
+          <div class="form-group">
+            <label for="languages">Langues parlées & niveaux</label>
+            <input 
+              type="text" 
+              id="languages" 
+              name="languages" 
+              placeholder="ex. Français (Natif), Anglais (Courant - C1), Espagnol (Intermédiaire - B1)"
+            >
+            <small class="help-text">Séparez les langues par des virgules (ex: Français (Natif), Anglais (Courant)).</small>
+          </div>
+        </fieldset>
+
+        <!-- Barre de boutons d'action du formulaire -->
+        <div class="form-actions">
+          <button type="submit" id="generate-btn" class="btn btn-primary btn-lg">
+            ✨ Créer mon CV
+          </button>
+          <button type="button" id="preview-quick-btn" class="btn btn-secondary btn-lg">
+            👁️ Prévisualiser le CV
+          </button>
+          <button type="button" id="reset-btn" class="btn btn-danger-outline btn-lg">
+            🗑️ Effacer le formulaire
+          </button>
+        </div>
+
+      </form>
+    </section>
+
+    <!-- ==================== ÉTAPE 2 : APERÇU DU CV ==================== -->
+    <section id="preview-section" class="preview-container">
+      
+      <!-- Barre d'outils d'action (masquée à l'impression) -->
+      <div class="preview-toolbar no-print">
+        <div class="toolbar-info">
+          <h3>👁️ Aperçu de votre CV</h3>
+          <p>Vérifiez le rendu en direct. Vous pouvez continuer à modifier vos informations à tout moment.</p>
+        </div>
+        <div class="toolbar-actions">
+          <button type="button" id="edit-btn" class="btn btn-secondary">
+            ✏️ Modifier les informations
+          </button>
+          <button type="button" id="download-pdf-btn" class="btn btn-primary">
+            📥 Télécharger en PDF
+          </button>
+          <button type="button" id="print-btn" class="btn btn-success">
+            🖨️ Imprimer le CV
+          </button>
+        </div>
+      </div>
+
+      <!-- Le Document CV Imprimable (Feuille A4) -->
+      <div class="cv-paper" id="cv-paper">
+        
+        <!-- En-tête du CV avec photo et coordonnées -->
+        <header class="cv-header">
+          <div class="cv-header-main">
+            <!-- Photo (si présente) -->
+            <div class="cv-photo-wrapper hidden" id="preview-photo-container">
+              <img id="preview-photo" src="" alt="Photo de profil" class="cv-photo">
+            </div>
+
+            <!-- Nom & Titre -->
+            <div class="cv-identity">
+              <h1 id="preview-name">Votre Nom et Prénom</h1>
+              <p class="cv-tagline" id="preview-tagline">Curriculum Vitae Professionnel</p>
+            </div>
+          </div>
+
+          <!-- Coordonnées sous forme de badges doux -->
+          <div class="cv-contact-bar">
+            <span class="contact-item" id="contact-email-item">
+              <span class="contact-icon">✉️</span>
+              <span id="preview-email">votre.email@exemple.com</span>
+            </span>
+            <span class="contact-divider">•</span>
+            <span class="contact-item" id="contact-phone-item">
+              <span class="contact-icon">📞</span>
+              <span id="preview-phone">06 00 00 00 00</span>
+            </span>
+            <span class="contact-divider">•</span>
+            <span class="contact-item" id="contact-address-item">
+              <span class="contact-icon">📍</span>
+              <span id="preview-address">Ville, Pays</span>
+            </span>
+          </div>
+        </header>
+
+        <!-- Corps du CV -->
+        <div class="cv-body">
+
+          <!-- Section : Profil professionnel -->
+          <section class="cv-block" id="preview-profile-block">
+            <h2 class="cv-block-title">
+              <span class="block-icon">🌟</span> Profil Professionnel
+            </h2>
+            <div class="cv-block-content cv-profile-text" id="preview-profile">
+              Passionné(e) et motivé(e), je mets mes compétences et mon dynamisme au service de vos projets.
+            </div>
+          </section>
+
+          <!-- Section : Formations & Études -->
+          <section class="cv-block" id="preview-education-block">
+            <h2 class="cv-block-title">
+              <span class="block-icon">🎓</span> Formation & Études
+            </h2>
+            <div class="cv-block-content cv-timeline" id="preview-education">
+              Vos diplômes et formations apparaîtront ici.
+            </div>
+          </section>
+
+          <!-- Section : Expériences professionnelles -->
+          <section class="cv-block" id="preview-experience-block">
+            <h2 class="cv-block-title">
+              <span class="block-icon">💼</span> Expériences Professionnelles
+            </h2>
+            <div class="cv-block-content cv-timeline" id="preview-experience">
+              Vos expériences professionnelles apparaîtront ici.
+            </div>
+          </section>
+
+          <!-- Section à 2 colonnes : Compétences & Langues -->
+          <div class="cv-two-columns">
+            <!-- Compétences -->
+            <section class="cv-block" id="preview-skills-block">
+              <h2 class="cv-block-title">
+                <span class="block-icon">⚡</span> Compétences
+              </h2>
+              <div class="cv-block-content" id="preview-skills">
+                <div class="skills-list">
+                  <span class="skill-tag">HTML5</span>
+                  <span class="skill-tag">CSS3</span>
+                  <span class="skill-tag">JavaScript</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- Langues -->
+            <section class="cv-block" id="preview-languages-block">
+              <h2 class="cv-block-title">
+                <span class="block-icon">🌐</span> Langues
+              </h2>
+              <div class="cv-block-content" id="preview-languages">
+                <div class="languages-list">
+                  <span class="language-tag">Français (Natif)</span>
+                  <span class="language-tag">Anglais (Courant)</span>
+                </div>
+              </div>
+            </section>
+          </div>
+
+        </div>
+
+        <!-- Pied de page discret du CV -->
+        <footer class="cv-footer">
+          <span>CV réalisé avec Simple CV Creator</span>
+        </footer>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== CONTENEUR DE NOTIFICATIONS (TOASTS) ==================== -->
+  <div id="toast-container" class="toast-container no-print" aria-live="polite"></div>
+
+  <!-- ==================== PIED DE PAGE DU SITE ==================== -->
+  <footer class="site-footer no-print">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <span class="footer-logo">🌸 Simple CV Creator</span>
+        <p>Un outil moderne, gratuit et respectueux de votre vie privée. Vos données restent dans votre navigateur.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#home-section">Accueil</a>
+        <a href="#form-section">Créer un CV</a>
+        <a href="#preview-section">Aperçu</a>
+      </div>
+      <div class="footer-copy">
+        <p>Simple CV Creator &copy; 2026 • Réalisé avec HTML5, CSS3 & JavaScript pur.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script JavaScript externe -->
+  <script src="script.js"></script>
+</body>
+</html>
